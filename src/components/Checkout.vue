@@ -5,7 +5,7 @@
       <div id="autocomplete-area">
         <table>
           <tbody>
-            <tr v-for="street in objKeys" :key="street">
+            <tr v-for="street in getLocalItems" :key="street">
               <th class="cursor"
                 @click="loadLocal"
                 :id="street"
@@ -99,7 +99,7 @@ export default {
         orderDetails[key] = input.value
         if (!input.value) isValid = false
       }
-      localStorage.setItem(orderDetails.street, JSON.stringify(orderDetails))
+      localStorage.setItem(`address${orderDetails.street}`, JSON.stringify(orderDetails))
       orderDetails[a] = store.getters.order
       isValid && this.$store.commit('sendOrder', orderDetails)
     },
@@ -113,6 +113,9 @@ export default {
   computed: {
     getByID () {
       return id => JSON.parse(localStorage.getItem(id))
+    },
+    getLocalItems () {
+      return this.objKeys.filter(item => item.indexOf('address') > -1)
     }
   }
 }
